@@ -3,24 +3,10 @@ import { View, FlatList, Text, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function ImportantScreen({ route }: { route: any }) {
-  const { tasks } = route.params; // Get important tasks passed from the HomeScreen
-
-  const renderTask = ({ item }: { item: { id: string, title: string } }) => (
-    <View style={styles.taskItem}>
-      <Text style={styles.taskText}>{item.title}</Text>
-    </View>
-  );
-
+export default function ImportantScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title">Important tasks</ThemedText>
-      <FlatList
-        data={tasks}
-        renderItem={renderTask}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.taskList}
-      />
     </ThemedView>
   );
 }

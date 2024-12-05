@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, View, Text, FlatList, Button, TextInput, TouchableOpacity } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Link } from 'expo-router';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-// Simulate a task list (in a real app, this would come from state or a backend)
+// Pre-made task list
 const initialTasks = [
   { id: '1', title: 'You can add tasks here!', completed: false, important: false },
   { id: '2', title: 'Mark the tasks done', completed: true, important: false },
@@ -18,18 +18,37 @@ export default function HomeScreen() {
   // Function to render task items
   const renderTask = ({ item }: { item: { id: string, title: string, completed: boolean, important: boolean } }) => (
     <View style={styles.taskItem}>
-      <Text style={[styles.taskText, item.completed && styles.completedTask]}>
-        {item.title}
-      </Text>
-      {/* Important button */}
+
       <TouchableOpacity
-        style={styles.importantButton}
-        onPress={() => toggleImportant(item.id)}
+        onPress={() => toggleCompleted(item.id)} // Toggle completion on task press
       >
-        <Text style={styles.importantText}>
-          {item.important ? '⭐' : '☆'}
+        <Text style={[styles.taskText, item.completed && styles.completedTask]}>
+          {item.title}
         </Text>
       </TouchableOpacity>
+
+      {/* Icons container */}
+      <View style={styles.iconsContainer}>
+        {/* Important button */}
+        <TouchableOpacity
+          style={styles.importantButton}
+          onPress={() => toggleImportant(item.id)}
+        >
+          <Text style={styles.importantText}>
+            {item.important ? '⭐' : '☆'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Delete button */}
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => deleteTask(item.id)}
+        >
+          <Icon name="trash" size={16} color="#fff" />
+        </TouchableOpacity>
+
+      </View>
+
     </View>
   );
 
@@ -40,11 +59,15 @@ export default function HomeScreen() {
         id: (tasks.length + 1).toString(),
         title: newTask,
         completed: false,
-        important: false, // New tasks are not important by default
+        important: false,
       };
       setTasks([...tasks, newTaskObj]);
       setNewTask('');
     }
+  };
+
+  const deleteTask = (taskId: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
   // Function to toggle the "important" status of a task
@@ -56,6 +79,16 @@ export default function HomeScreen() {
     );
   };
 
+  // Function to toggle the "completed" status of a task
+  const toggleCompleted = (taskId: string) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task
+      )
+    );
+};
+  
+
   return (
     <ThemedView style={styles.container}>
       <Image
@@ -63,8 +96,7 @@ export default function HomeScreen() {
         style={styles.reactLogo}
       />
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">GoalKeeper!</ThemedText>
-        <ThemedText type="subtitle">Your Tasks:</ThemedText>
+        <ThemedText type="title" style={styles.titleText}>GoalKeeper</ThemedText>
       </ThemedView>
 
       {/* Input field for new task */}
@@ -76,7 +108,12 @@ export default function HomeScreen() {
       />
 
       {/* Button to add the new task */}
-      <Button title="Add Task" onPress={addTask} />
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={addTask}
+      >
+        <Text style={styles.buttonText}>Add Task</Text>
+      </TouchableOpacity>
 
       {/* FlatList to display tasks */}
       <FlatList
@@ -104,8 +141,28 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   titleContainer: {
+    backgroundColor: '#F5F5F5',
     alignItems: 'center',
     marginBottom: 20,
+  },  
+  titleText: {
+    padding: 15,
+    fontSize: 33,
+    fontWeight: 'bold',
+    color: '#4a90e2',
+  },
+  addButton: {
+    backgroundColor: '#339FFF',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   taskList: {
     width: '100%',
@@ -140,12 +197,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     paddingLeft: 10,
-    width: '100%',
+    width: '70%',
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   importantButton: {
     padding: 8,
   },
   importantText: {
     fontSize: 18,
+  },
+  deleteButton: {
+    backgroundColor: '#ff4d4d',
+    padding: 8,
+    borderRadius: 5,
+    marginLeft: 10,
   },
 });
