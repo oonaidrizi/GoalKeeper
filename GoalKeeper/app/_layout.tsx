@@ -14,6 +14,8 @@ import { Colors } from '@/constants/Colors';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+import HomeStack from '../navigation/HomeStack';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 

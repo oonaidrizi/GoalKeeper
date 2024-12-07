@@ -3,6 +3,11 @@ import { Image, StyleSheet, View, Text, FlatList, Button, TextInput, TouchableOp
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../navigation/HomeStack';
+
+type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'HomeScreen'>;
 
 // Pre-made task list
 const initialTasks = [
@@ -14,6 +19,8 @@ const initialTasks = [
 export default function HomeScreen() {
   const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState(''); // State for the input field
+
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   // Function to render task items
   const renderTask = ({ item }: { item: { id: string, title: string, completed: boolean, important: boolean } }) => (
@@ -37,6 +44,14 @@ export default function HomeScreen() {
           <Text style={styles.importantText}>
             {item.important ? '⭐' : '☆'}
           </Text>
+        </TouchableOpacity>
+
+        {/* Edit button */}
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate('EditTaskScreen', { taskId: item.id, taskTitle: item.title })}
+        >
+          <Icon name="edit" size={16} color="#000" />
         </TouchableOpacity>
 
         {/* Delete button */}
@@ -208,6 +223,10 @@ const styles = StyleSheet.create({
   },
   importantText: {
     fontSize: 18,
+  },
+  editButton: {
+    padding: 8,
+    marginRight: 10,
   },
   deleteButton: {
     backgroundColor: '#ff4d4d',
