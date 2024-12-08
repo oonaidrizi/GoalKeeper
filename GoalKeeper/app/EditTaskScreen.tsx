@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { HomeStackParamList } from '../navigation/HomeStack'; // Ensure this path is correct
+import { HomeStackParamList } from '../navigation/HomeStack';
 
 type EditTaskScreenRouteProp = RouteProp<HomeStackParamList, 'EditTaskScreen'>;
 
@@ -12,9 +12,8 @@ export default function EditTaskScreen() {
   // State to manage the task title being edited
   const [editedTitle, setEditedTitle] = useState(taskTitle);
 
-  // Optionally, you could add logic to update the task after edit is complete
   const handleSave = () => {
-    // Here you would save the edited task title (e.g., update state or make an API call)
+    // This only logs the change on console
     console.log(`Task ID: ${taskId} - New Title: ${editedTitle}`);
   };
 
@@ -35,7 +34,7 @@ export default function EditTaskScreen() {
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
 
-      {/* Task ID for reference */}
+      {/* Task ID */}
       <Text style={styles.taskId}>Task ID: {taskId}</Text>
     </View>
   );

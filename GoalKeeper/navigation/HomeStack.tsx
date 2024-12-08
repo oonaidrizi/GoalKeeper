@@ -1,9 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../app/index'; // Adjust path to your Home screen
-import EditTaskScreen from '../app/EditTaskScreen'; // Adjust path to your Edit screen
+import HomeScreen from '../app/index';
+import EditTaskScreen from '../app/EditTaskScreen';
 
-// Define the parameter list for the stack navigator
 export type HomeStackParamList = {
   HomeScreen: undefined;
   EditTaskScreen: { taskId: string; taskTitle: string };

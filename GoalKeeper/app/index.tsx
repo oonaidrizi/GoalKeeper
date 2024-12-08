@@ -15,8 +15,8 @@ type HomeStackParamList = {
 };
 
 export default function HomeScreen() {
-  const { tasks, setTasks } = useTasks(); // Use global tasks context
-  const [newTask, setNewTask] = useState(''); // State for new task input
+  const { tasks, setTasks } = useTasks();
+  const [newTask, setNewTask] = useState('');
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -54,12 +54,12 @@ export default function HomeScreen() {
   const addTask = () => {
     if (newTask.trim()) {
       const newTaskObj = {
-        id: Date.now().toString(), // Unique ID based on timestamp
+        id: Date.now().toString(),
         title: newTask,
         completed: false,
         important: false,
       };
-      setTasks([...tasks, newTaskObj]); // Update global tasks
+      setTasks([...tasks, newTaskObj]);
       setNewTask('');
     }
   };

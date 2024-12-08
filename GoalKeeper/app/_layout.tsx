@@ -14,7 +14,6 @@ import { Colors } from '@/constants/Colors';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-import HomeStack from '../navigation/HomeStack';
 import React from 'react';
 import { TaskProvider } from '@/context/TaskContext';
 
@@ -48,7 +47,6 @@ export default function RootLayout() {
           tabBarBackground: TabBarBackground,
           tabBarStyle: Platform.select({
             ios: {
-              // Use a transparent background on iOS to show the blur effect
               position: 'absolute',
             },
             default: {},
@@ -65,6 +63,13 @@ export default function RootLayout() {
           name="important"
           options={{
             title: 'Important',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="EditTaskScreen"
+          options={{
+            title: 'Edit(-nappi ei toimi)',
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
           }}
         />
