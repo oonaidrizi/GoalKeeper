@@ -2,12 +2,28 @@ import React from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useTasks } from '@/context/TaskContext';
 
 export default function ImportantScreen() {
+  const { tasks } = useTasks();
+
+  const importantTasks = tasks.filter((task) => task.important);
+
+  const renderTask = ({ item }: { item: { id: string, title: string } }) => (
+    <View style={styles.taskItem}>
+      <Text style={styles.taskText}>{item.title}</Text>
+    </View>
+  );
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Important tasks</ThemedText>
-    </ThemedView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Important Tasks</Text>
+      <FlatList
+        data={importantTasks}
+        renderItem={renderTask}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 }
 
@@ -15,25 +31,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    padding: 20,
   },
-  taskList: {
-    width: '100%',
-    paddingHorizontal: 20,
-    marginTop: 20,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   taskItem: {
-    backgroundColor: '#fff',
     padding: 15,
     marginBottom: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
+    backgroundColor: '#fff',
+    borderRadius: 8,
   },
   taskText: {
     fontSize: 16,

@@ -1,52 +1,41 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, View, Text, FlatList, Button, TextInput, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HomeStackParamList } from '../navigation/HomeStack';
+import { useTasks } from '@/context/TaskContext';
 
 type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'HomeScreen'>;
 
-// Pre-made task list
-const initialTasks = [
-  { id: '1', title: 'You can add tasks here!', completed: false, important: false },
-  { id: '2', title: 'Mark the tasks done', completed: true, important: false },
-  { id: '3', title: 'And add the tasks important!', completed: false, important: true },
-];
+type HomeStackParamList = {
+  HomeScreen: undefined;
+  EditTaskScreen: { taskId: string; taskTitle: string };
+};
 
 export default function HomeScreen() {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [newTask, setNewTask] = useState(''); // State for the input field
+  const { tasks, setTasks } = useTasks(); // Use global tasks context
+  const [newTask, setNewTask] = useState(''); // State for new task input
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  // Function to render task items
   const renderTask = ({ item }: { item: { id: string, title: string, completed: boolean, important: boolean } }) => (
     <View style={styles.taskItem}>
-
-      <TouchableOpacity
-        onPress={() => toggleCompleted(item.id)} // Toggle completion on task press
-      >
+      {/* Toggle completion */}
+      <TouchableOpacity onPress={() => toggleCompleted(item.id)}>
         <Text style={[styles.taskText, item.completed && styles.completedTask]}>
           {item.title}
         </Text>
       </TouchableOpacity>
 
-      {/* Icons container */}
       <View style={styles.iconsContainer}>
-        {/* Important button */}
-        <TouchableOpacity
-          style={styles.importantButton}
-          onPress={() => toggleImportant(item.id)}
-        >
-          <Text style={styles.importantText}>
-            {item.important ? '⭐' : '☆'}
-          </Text>
+        {/* Toggle important */}
+        <TouchableOpacity style={styles.importantButton} onPress={() => toggleImportant(item.id)}>
+          <Text style={styles.importantText}>{item.important ? '⭐' : '☆'}</Text>
         </TouchableOpacity>
 
-        {/* Edit button */}
+        {/* Edit task */}
         <TouchableOpacity
           style={styles.editButton}
           onPress={() => navigation.navigate('EditTaskScreen', { taskId: item.id, taskTitle: item.title })}
@@ -54,29 +43,23 @@ export default function HomeScreen() {
           <Icon name="edit" size={16} color="#000" />
         </TouchableOpacity>
 
-        {/* Delete button */}
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => deleteTask(item.id)}
-        >
+        {/* Delete task */}
+        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteTask(item.id)}>
           <Icon name="trash" size={16} color="#fff" />
         </TouchableOpacity>
-
       </View>
-
     </View>
   );
 
-  // Function to add a new task
   const addTask = () => {
     if (newTask.trim()) {
       const newTaskObj = {
-        id: (tasks.length + 1).toString(),
+        id: Date.now().toString(), // Unique ID based on timestamp
         title: newTask,
         completed: false,
         important: false,
       };
-      setTasks([...tasks, newTaskObj]);
+      setTasks([...tasks, newTaskObj]); // Update global tasks
       setNewTask('');
     }
   };
@@ -85,52 +68,35 @@ export default function HomeScreen() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
-  // Function to toggle the "important" status of a task
   const toggleImportant = (taskId: string) => {
     setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, important: !task.important } : task
-      )
+      prevTasks.map((task) => (task.id === taskId ? { ...task, important: !task.important } : task))
     );
   };
 
-  // Function to toggle the "completed" status of a task
   const toggleCompleted = (taskId: string) => {
     setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
+      prevTasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task))
     );
-};
-  
+  };
 
   return (
     <ThemedView style={styles.container}>
-      <Image
-        source={require('@/assets/images/checklist.jpg')}
-        style={styles.reactLogo}
-      />
+      <Image source={require('@/assets/images/checklist.jpg')} style={styles.reactLogo} />
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title" style={styles.titleText}>GoalKeeper</ThemedText>
       </ThemedView>
 
-      {/* Input field for new task */}
       <TextInput
         style={styles.input}
         placeholder="Enter your task here"
         value={newTask}
         onChangeText={setNewTask}
       />
-
-      {/* Button to add the new task */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={addTask}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={addTask}>
         <Text style={styles.buttonText}>Add Task</Text>
       </TouchableOpacity>
 
-      {/* FlatList to display tasks */}
       <FlatList
         data={tasks}
         renderItem={renderTask}
