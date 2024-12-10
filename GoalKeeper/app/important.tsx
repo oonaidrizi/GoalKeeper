@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 18,
-    color: '#aaa',
+    color: '#778',
     marginTop: 10,
     textAlign: 'center',
   },
