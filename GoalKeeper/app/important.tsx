@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { ThemedView } from '@/components/ThemedView';
 import { useTasks } from '@/context/TaskContext';
 
 export default function ImportantScreen() {
@@ -11,18 +11,22 @@ export default function ImportantScreen() {
 
   const renderTask = ({ item }: { item: { id: string; title: string; completed: boolean; important: boolean } }) => (
     <View style={styles.taskCard}>
+
       <View style={styles.taskContent}>
         <Text style={[styles.taskTitle, item.completed && styles.completedTask]}>
           {item.title}
         </Text>
+
         <View style={styles.taskActions}>
           <TouchableOpacity onPress={() => toggleCompleted(item.id)}>
             <Icon name="check-circle" size={20} color={item.completed ? '#4CAF50' : '#ccc'} />
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => toggleImportant(item.id)} style={styles.starIcon}>
             <Icon name={item.important ? 'star' : 'star-o'} size={20} color="#FFC107" />
           </TouchableOpacity>
         </View>
+        
       </View>
     </View>
   );

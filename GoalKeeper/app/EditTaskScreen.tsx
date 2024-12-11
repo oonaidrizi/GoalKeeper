@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { HomeStackParamList } from '../navigation/HomeStack';
 
@@ -33,9 +33,6 @@ export default function EditTaskScreen() {
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
-
-      {/* Task ID */}
-      <Text style={styles.taskId}>Task ID: {taskId}</Text>
     </View>
   );
 }

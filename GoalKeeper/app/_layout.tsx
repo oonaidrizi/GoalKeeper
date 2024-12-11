@@ -1,21 +1,18 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { Platform } from 'react-native';
 import 'react-native-reanimated';
 
+import { useFonts } from 'expo-font';
 import { Tabs } from 'expo-router';
-import { Platform } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
-
+import { TaskProvider } from '@/context/TaskContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-import React from 'react';
-import { TaskProvider } from '@/context/TaskContext';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -69,7 +66,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="EditTaskScreen"
           options={{
-            title: 'Edit(-nappi ei toimi)',
+            title: 'Edit',
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
           }}
         />
